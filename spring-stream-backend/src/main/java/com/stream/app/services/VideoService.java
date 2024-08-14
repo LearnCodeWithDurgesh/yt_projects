@@ -25,7 +25,7 @@ public interface VideoService {
 
 
     //video processing
-    String processVideo(String videoId,MultipartFile file);
+    String processVideo(String videoId);
 
 
 }

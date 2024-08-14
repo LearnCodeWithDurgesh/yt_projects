@@ -94,6 +94,8 @@ public class VideoServiceImpl implements VideoService {
             video.setFilePath(path.toString());
 
 
+            processVideo(video.getVideoId());
+
             // metadata save
 
             return videoRepository.save(video);
@@ -124,7 +126,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public String processVideo(String videoId, MultipartFile file) {
+    public String processVideo(String videoId) {
 
         Video video = this.get(videoId);
         String filePath = video.getFilePath();
@@ -133,35 +135,44 @@ public class VideoServiceImpl implements VideoService {
         Path videoPath = Paths.get(filePath);
 
 
-        String output360p = HSL_DIR + videoId + "/360p/";
-        String output720p = HSL_DIR + videoId + "/720p/";
-        String output1080p = HSL_DIR + videoId + "/1080p/";
+//        String output360p = HSL_DIR + videoId + "/360p/";
+//        String output720p = HSL_DIR + videoId + "/720p/";
+//        String output1080p = HSL_DIR + videoId + "/1080p/";
 
         try {
-            Files.createDirectories(Paths.get(output360p));
-            Files.createDirectories(Paths.get(output720p));
-            Files.createDirectories(Paths.get(output1080p));
+//            Files.createDirectories(Paths.get(output360p));
+//            Files.createDirectories(Paths.get(output720p));
+//            Files.createDirectories(Paths.get(output1080p));
 
             // ffmpeg command
+            Path outputPath = Paths.get(HSL_DIR, videoId);
 
-            StringBuilder ffmpegCmd = new StringBuilder();
-            ffmpegCmd.append("ffmpeg  -i ")
-                    .append(videoPath.toString())
-                    .append(" -c:v libx264 -c:a aac")
-                    .append(" ")
-                    .append("-map 0:v -map 0:a -s:v:0 640x360 -b:v:0 800k ")
-                    .append("-map 0:v -map 0:a -s:v:1 1280x720 -b:v:1 2800k ")
-                    .append("-map 0:v -map 0:a -s:v:2 1920x1080 -b:v:2 5000k ")
-                    .append("-var_stream_map \"v:0,a:0 v:1,a:0 v:2,a:0\" ")
-                    .append("-master_pl_name ").append(HSL_DIR).append(videoId).append("/master.m3u8 ")
-                    .append("-f hls -hls_time 10 -hls_list_size 0 ")
-                    .append("-hls_segment_filename \"").append(HSL_DIR).append(videoId).append("/v%v/fileSequence%d.ts\" ")
-                    .append("\"").append(HSL_DIR).append(videoId).append("/v%v/prog_index.m3u8\"");
+            Files.createDirectories(outputPath);
+
+
+            String ffmpegCmd = String.format(
+                    "ffmpeg -i \"%s\" -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 10 -hls_list_size 0 -hls_segment_filename \"%s/segment_%%3d.ts\"  \"%s/master.m3u8\" ",
+                    videoPath, outputPath, outputPath
+            );
+
+//            StringBuilder ffmpegCmd = new StringBuilder();
+//            ffmpegCmd.append("ffmpeg  -i ")
+//                    .append(videoPath.toString())
+//                    .append(" -c:v libx264 -c:a aac")
+//                    .append(" ")
+//                    .append("-map 0:v -map 0:a -s:v:0 640x360 -b:v:0 800k ")
+//                    .append("-map 0:v -map 0:a -s:v:1 1280x720 -b:v:1 2800k ")
+//                    .append("-map 0:v -map 0:a -s:v:2 1920x1080 -b:v:2 5000k ")
+//                    .append("-var_stream_map \"v:0,a:0 v:1,a:0 v:2,a:0\" ")
+//                    .append("-master_pl_name ").append(HSL_DIR).append(videoId).append("/master.m3u8 ")
+//                    .append("-f hls -hls_time 10 -hls_list_size 0 ")
+//                    .append("-hls_segment_filename \"").append(HSL_DIR).append(videoId).append("/v%v/fileSequence%d.ts\" ")
+//                    .append("\"").append(HSL_DIR).append(videoId).append("/v%v/prog_index.m3u8\"");
 
 
             System.out.println(ffmpegCmd);
             //file this command
-            ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash","-c", ffmpegCmd.toString());
+            ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", ffmpegCmd);
             processBuilder.inheritIO();
             Process process = processBuilder.start();
             int exit = process.waitFor();
