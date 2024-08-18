@@ -4,9 +4,10 @@ import com.stream.app.AppConstants;
 import com.stream.app.entities.Video;
 import com.stream.app.playload.CustomMessage;
 import com.stream.app.services.VideoService;
+import lombok.experimental.Delegate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -25,7 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/videos")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:5173 ")
 public class VideoController {
 
 
@@ -65,20 +67,15 @@ public class VideoController {
 
 
     // stream video :
-
 //    http://localhost:8080/api/v1/videos/stream/35212512
 
     @GetMapping("/stream/{videoId}")
     public ResponseEntity<Resource> stream(@PathVariable String videoId) {
 
         Video video = videoService.get(videoId);
-
         String contentType = video.getContentType();
-
         String filePath = video.getFilePath();
-
         Resource resource = new FileSystemResource(filePath);
-
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
@@ -154,9 +151,9 @@ public class VideoController {
             long contentLength = rangeEnd - rangeStart + 1;
 
 
-            byte[]  data=new byte[(int) contentLength];
+            byte[] data = new byte[(int) contentLength];
             int read = inputStream.read(data, 0, data.length);
-            System.out.println("read(number of bytes) : "+read);
+            System.out.println("read(number of bytes) : " + read);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + fileLength);
@@ -173,12 +170,69 @@ public class VideoController {
                     .body(new ByteArrayResource(data));
 
 
-
         } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
 
+    }
+
+
+    //serve hls playlist
+
+    //master.m2u8 file
+
+    @Value("${file.video.hsl}")
+    private String HSL_DIR;
+
+    @GetMapping("/{videoId}/master.m3u8")
+    public ResponseEntity<Resource> serverMasterFile(
+            @PathVariable String videoId
+    ) {
+
+//        creating path
+        Path path = Paths.get(HSL_DIR, videoId, "master.m3u8");
+
+        System.out.println(path);
+
+        if (!Files.exists(path)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Resource resource = new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_TYPE, "application/vnd.apple.mpegurl"
+                )
+                .body(resource);
+
+
+    }
+
+    //serve the segments
+
+    @GetMapping("/{videoId}/{segment}.ts")
+    public ResponseEntity<Resource> serveSegments(
+            @PathVariable String videoId,
+            @PathVariable String segment
+    ) {
+
+        // create path for segment
+        Path path = Paths.get(HSL_DIR, videoId, segment + ".ts");
+        if (!Files.exists(path)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Resource resource = new FileSystemResource(path);
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_TYPE, "video/mp2t"
+                )
+                .body(resource);
 
     }
 

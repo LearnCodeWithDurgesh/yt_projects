@@ -1,4 +1,7 @@
 HELP.md
+
+videos/
+videos_hsl/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

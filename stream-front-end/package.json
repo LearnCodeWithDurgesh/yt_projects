@@ -12,11 +12,12 @@
   "dependencies": {
     "axios": "^1.7.3",
     "flowbite-react": "^0.10.1",
+    "hls.js": "^1.5.14",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "video-react": "^0.16.0",
-    "video.js": "^8.17.2"
+    "video.js": "^8.17.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
