@@ -1,0 +1,37 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{dd/L/YYYY hh:mm:ss: a} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE_SOUT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>logs/backend-project.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <fileNamePattern>logs/backend-project-%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <maxHistory>30</maxHistory>
+
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{dd/L/YYYY hh:mm:ss: a} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
+        </encoder>
+
+
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="com.backend" level="TRACE"  additivity="false">
+        <appender-ref ref="FILE_SOUT" />
+    </logger>
+
+</configuration>
