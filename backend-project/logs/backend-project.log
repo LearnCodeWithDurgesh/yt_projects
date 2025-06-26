@@ -1,0 +1,9 @@
+16/11/2024 02:28:06: pm [main] INFO  c.backend.BackendProjectApplication -- Starting BackendProjectApplication using Java 21.0.1 with PID 3735 (/Users/durgesh_mac/Documents/Workspace/YtCode/yt_projects/backend-project/target/classes started by durgesh_mac in /Users/durgesh_mac/Documents/Workspace/YtCode/yt_projects/backend-project)
+16/11/2024 02:28:06: pm [main] DEBUG c.backend.BackendProjectApplication -- Running with Spring Boot v3.3.5, Spring v6.1.14
+16/11/2024 02:28:06: pm [main] INFO  c.backend.BackendProjectApplication -- No active profile set, falling back to 1 default profile: "default"
+16/11/2024 02:28:06: pm [main] INFO  c.backend.BackendProjectApplication -- Started BackendProjectApplication in 0.732 seconds (process running for 0.916)
+16/11/2024 02:28:36: pm [http-nio-8080-exec-1] INFO  c.backend.controllers.HomeController -- This is api calling amit
+16/11/2024 02:28:36: pm [http-nio-8080-exec-1] DEBUG c.backend.controllers.HomeController -- This is api calling amit
+16/11/2024 02:28:36: pm [http-nio-8080-exec-1] ERROR c.backend.controllers.HomeController -- This is api calling amit
+16/11/2024 02:28:36: pm [http-nio-8080-exec-1] WARN  c.backend.controllers.HomeController -- This is api calling amit 
+16/11/2024 02:28:36: pm [http-nio-8080-exec-1] TRACE c.backend.controllers.HomeController -- This is api calling amit
