@@ -1,11 +1,6 @@
 package com.substring.auth.auth_app_backend.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -13,6 +8,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RoleDto {
     private UUID id;
     private String name;
