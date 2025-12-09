@@ -5,6 +5,8 @@ import com.substring.auth.auth_app_backend.entities.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecureDigestAlgorithm;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Getter
+@Setter
 public class JwtService {
 
     private final SecretKey key;
@@ -78,11 +82,7 @@ public class JwtService {
     //parse the token
 
     public Jws<Claims> parse(String token) {
-        try {
-            return Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-        } catch (JwtException e) {
-            throw e;
-        }
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
     }
 
     public boolean isAccessToken(String token) {
@@ -104,6 +104,18 @@ public class JwtService {
     public String getJti(String token) {
         return parse(token).getPayload().getId();
     }
+
+    public List<String> getRoles(String token) {
+        Claims c = parse(token).getPayload();
+        return (List<String>) c.get("roles");
+    }
+
+    public String getEmail(String token) {
+        Claims c = parse(token).getPayload();
+        return (String) c.get("email");
+    }
+
+
 
 
 }
