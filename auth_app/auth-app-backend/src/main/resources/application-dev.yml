@@ -28,7 +28,7 @@ spring:
         format_sql: true
     show-sql: true
   security:
-#    oauth2 configurations
+    #    oauth2 configurations
     oauth2:
       client:
         registration:
@@ -67,7 +67,7 @@ security:
   jwt:
     secret: ${JWT_SECRET:saiofal;vkasfbehwqpofhjashofjaswfpojasfvbafop[hfifonfo[shjfwefjjfslajfsahfoshffasnbash[f}
     issuer: ${JWT_ISSUER:api.substring.com}
-    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:3600}
+    access-ttl-seconds: ${JWT_ACCESS_TTL_SECONDS:600}
     refresh-ttl-seconds: ${JWT_REFRESH_TTL_SECONDS:86400}
     refresh-token-cookie-name: ${JWT_REFRESH_COOKIE_NAME:refreshToken}
     cookie-secure: ${JWT_COOKIE_SECURE:true}
@@ -77,7 +77,9 @@ security:
 
 
 app:
+  cors:
+    front-end-url: http://localhost:5173
   auth:
     frontend:
-      success-redirect: http://localhost:5173/auth/success
-      failure-redirect: http://localhost:5173/auth/failure
+      success-redirect: http://localhost:5173/oauth/success
+      failure-redirect: http://localhost:5173/oauth/failure

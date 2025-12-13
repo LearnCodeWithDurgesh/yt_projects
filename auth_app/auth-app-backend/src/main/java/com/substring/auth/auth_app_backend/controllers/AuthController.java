@@ -106,8 +106,10 @@ public class AuthController {
             @RequestBody(required = false) RefreshTokenRequest body,
             HttpServletResponse response,
             HttpServletRequest request
-    ) {
+    ) throws InterruptedException {
 
+
+        //Thread.sleep(5000);
 
         String refreshToken = readRefreshTokenFromRequest(body, request).orElseThrow(() -> new BadCredentialsException("Refresh token is missing"));
 
