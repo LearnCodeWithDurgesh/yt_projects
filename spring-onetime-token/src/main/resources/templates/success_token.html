@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>OTT Sent Successfully</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+
+<div class="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl p-8 text-center">
+
+    <!-- Success Icon -->
+    <div class="mx-auto mb-5 h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 13l4 4L19 7" />
+        </svg>
+    </div>
+
+    <!-- Message -->
+    <h1 class="text-2xl font-semibold text-slate-800 mb-2">
+        Token Sent Successfully
+    </h1>
+
+    <p class="text-slate-600 text-sm mb-6">
+        A one-time token has been sent to your registered email or mobile number.
+        Please check your inbox and proceed with verification.
+    </p>
+
+    <!-- Action Button -->
+   <div class="flex flex-col gap-2 justify-center">
+       <a
+
+               href="#!"
+               class="inline-flex items-center justify-center w-full py-3 rounded-xl
+             bg-green-200 text-white font-semibold text-lg
+             hover:bg-green-700 transition duration-200"
+       >
+           Check the email and follow the link
+       </a>
+       <a
+
+               href="/login/ott"
+               class="inline-flex items-center justify-center w-full py-3 rounded-xl
+             bg-indigo-200 text-white font-semibold text-lg
+             hover:bg-indigo-700 transition duration-200"
+       >
+           If you have token, Click here
+       </a>
+   </div>
+
+    <!-- Footer -->
+    <p class="text-xs text-slate-500 mt-5">
+        Didn’t receive the token?
+        <a href="#" class="text-indigo-600 font-medium hover:underline">
+            Resend
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

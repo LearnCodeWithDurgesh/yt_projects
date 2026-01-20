@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Simple Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+<!-- Top Navbar -->
+<header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-slate-800">
+        Dashboard
+    </h1>
+    <div class="flex items-center gap-4">
+        <span class="text-slate-600 text-sm">Welcome, User</span>
+        <div class="h-9 w-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-semibold">
+            U
+        </div>
+    </div>
+</header>
+
+<div class="flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white min-h-[calc(100vh-64px)] shadow-sm">
+        <nav class="p-4 space-y-2">
+            <a href="#" class="block px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-medium">
+                Dashboard
+            </a>
+            <a href="#" class="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                Users
+            </a>
+            <a href="#" class="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                Courses
+            </a>
+            <a href="#" class="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                Settings
+            </a>
+            <a href="/logout" class="block px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                Logout
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Users</p>
+                <h2 class="text-2xl font-bold text-slate-800">1,240</h2>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Courses</p>
+                <h2 class="text-2xl font-bold text-slate-800">18</h2>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Revenue</p>
+                <h2 class="text-2xl font-bold text-slate-800">₹92,400</h2>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-slate-500">Active</p>
+                <h2 class="text-2xl font-bold text-slate-800">87%</h2>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                Recent Activity
+            </h3>
+            <ul class="space-y-3 text-sm text-slate-600">
+                <li>✔ New user registered</li>
+                <li>✔ Course "Spring Boot Mastery" published</li>
+                <li>✔ Payment received</li>
+            </ul>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
