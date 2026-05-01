@@ -1,0 +1,18 @@
+<div class="container flex h-screen items-center justify-center flex-col">
+  @if(userInformation){
+  <div
+    class="information_container flex flex-col justify-center items-center space-y-4"
+  >
+    <img class="rounded-full" [src]="userInformation.photoUrl" alt="" />
+    <h1>Username: {{ userInformation.name }}</h1>
+    <h2>Provider: {{ userInformation.provider }}</h2>
+  </div>
+  }@else{
+  <asl-google-signin-button
+    size="large"
+    [text]="'signin_with'"
+    type="standard"
+    shape="pill"
+  ></asl-google-signin-button
+  >}
+</div>
