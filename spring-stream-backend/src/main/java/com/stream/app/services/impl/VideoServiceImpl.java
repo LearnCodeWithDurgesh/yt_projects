@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.io.*;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -126,70 +127,40 @@ public class VideoServiceImpl implements VideoService {
         return videoRepository.findAll();
     }
 
-    @Override
-    public String processVideo(String videoId) {
+@Override
+public String processVideo(String videoId) {
+    Video video = this.get(videoId);
+    String filePath = video.getFilePath();
 
-        Video video = this.get(videoId);
-        String filePath = video.getFilePath();
+    // Path where to store data:
+    Path videoPath = Paths.get(filePath);
 
-        //path where to store data:
-        Path videoPath = Paths.get(filePath);
+    try {
+        // ffmpeg command
+        Path outputPath = Paths.get(HSL_DIR, videoId);
+        Files.createDirectories(outputPath);
 
+        String ffmpegCmd = "ffmpeg -i \"" + videoPath.toString() + "\" -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 10 -hls_list_size 0 -hls_segment_filename \"" + outputPath.toString() + "\\segment_%03d.ts\" \"" + outputPath.toString() + "\\master.m3u8\"";
 
-//        String output360p = HSL_DIR + videoId + "/360p/";
-//        String output720p = HSL_DIR + videoId + "/720p/";
-//        String output1080p = HSL_DIR + videoId + "/1080p/";
+        System.out.println("Running ffmpeg command: " + ffmpegCmd);
 
-        try {
-//            Files.createDirectories(Paths.get(output360p));
-//            Files.createDirectories(Paths.get(output720p));
-//            Files.createDirectories(Paths.get(output1080p));
+        // Run the command on Windows using cmd.exe
+        ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", ffmpegCmd);
+        processBuilder.inheritIO();
+        Process process = processBuilder.start();
+        int exitCode = process.waitFor();
 
-            // ffmpeg command
-            Path outputPath = Paths.get(HSL_DIR, videoId);
-
-            Files.createDirectories(outputPath);
-
-
-            String ffmpegCmd = String.format(
-                    "ffmpeg -i \"%s\" -c:v libx264 -c:a aac -strict -2 -f hls -hls_time 10 -hls_list_size 0 -hls_segment_filename \"%s/segment_%%3d.ts\"  \"%s/master.m3u8\" ",
-                    videoPath, outputPath, outputPath
-            );
-
-//            StringBuilder ffmpegCmd = new StringBuilder();
-//            ffmpegCmd.append("ffmpeg  -i ")
-//                    .append(videoPath.toString())
-//                    .append(" -c:v libx264 -c:a aac")
-//                    .append(" ")
-//                    .append("-map 0:v -map 0:a -s:v:0 640x360 -b:v:0 800k ")
-//                    .append("-map 0:v -map 0:a -s:v:1 1280x720 -b:v:1 2800k ")
-//                    .append("-map 0:v -map 0:a -s:v:2 1920x1080 -b:v:2 5000k ")
-//                    .append("-var_stream_map \"v:0,a:0 v:1,a:0 v:2,a:0\" ")
-//                    .append("-master_pl_name ").append(HSL_DIR).append(videoId).append("/master.m3u8 ")
-//                    .append("-f hls -hls_time 10 -hls_list_size 0 ")
-//                    .append("-hls_segment_filename \"").append(HSL_DIR).append(videoId).append("/v%v/fileSequence%d.ts\" ")
-//                    .append("\"").append(HSL_DIR).append(videoId).append("/v%v/prog_index.m3u8\"");
-
-
-            System.out.println(ffmpegCmd);
-            //file this command
-            ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", ffmpegCmd);
-            processBuilder.inheritIO();
-            Process process = processBuilder.start();
-            int exit = process.waitFor();
-            if (exit != 0) {
-                throw new RuntimeException("video processing failed!!");
-            }
-
-            return videoId;
-
-
-        } catch (IOException ex) {
-            throw new RuntimeException("Video processing fail!!");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (exitCode != 0) {
+            throw new RuntimeException("Video processing failed!");
         }
 
+        return videoId;
 
+    } catch (IOException ex) {
+        throw new RuntimeException("Video processing failed due to IOException!", ex);
+    } catch (InterruptedException ex) {
+        throw new RuntimeException("Video processing was interrupted!", ex);
     }
+}
+
 }
